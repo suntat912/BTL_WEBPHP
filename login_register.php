@@ -1,10 +1,16 @@
 <?php
 session_start();
 
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (isset($_SESSION['username'])) {
+    header("Location: ./user/index.php"); // Chuyển hướng nếu đã đăng nhập
+    exit();
+}
+
 // Kết nối đến cơ sở dữ liệu
 $servername = "localhost";
 $username = "root"; // Tên người dùng
-$password = "Nghiacoi2212@"; // Mật khẩu
+$password = "1234"; // Mật khẩu
 $dbname = "fashion_store"; // Tên cơ sở dữ liệu
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -27,7 +33,7 @@ $admin_role = 'admin';
 $sql_check_admin = "SELECT * FROM User_Accounts WHERE username='$admin_username'";
 $result_check = $conn->query($sql_check_admin);
 
-if ($result_check->num_rows == 0) {
+if ($result_check && $result_check->num_rows == 0) {
     $sql_create_admin = "INSERT INTO User_Accounts (username, password_hash, email, full_name, role) 
                          VALUES ('$admin_username', '$admin_password', '$admin_email', '$admin_full_name', '$admin_role')";
     $conn->query($sql_create_admin);
@@ -73,10 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
             $_SESSION['user_id'] = $row['account_id']; // Lưu ID người dùng vào session
             
             // Chuyển hướng đến trang tương ứng
-            if ($username === 'admin') {
-                header("Location: /fashion_store/admin/index_ad.php"); // Chuyển đến trang admin
+            if ($username === 'admin' && $admin_role === 'admin') {
+                header("Location: ./admin/index_ad.php"); // Chuyển đến trang admin
             } else {
-                header("Location: /fashion_store/user/index.php"); // Chuyển đến trang người dùng
+                header("Location: ./user/index.php"); // Chuyển đến trang người dùng
             }
             exit(); // Dừng thực thi script
         } else {
@@ -111,21 +117,36 @@ $conn->close();
             background: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 400px; /* Độ rộng của form */
-            max-width: 90%; /* Để đảm bảo form không vượt quá màn hình trên thiết bị nhỏ */
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
         }
         h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
-        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="date"], select {
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
+            transition: border 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border: 1px solid #007bff;
         }
         button {
             width: 100%;
@@ -136,6 +157,7 @@ $conn->close();
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background 0.3s;
         }
         button:hover {
             background: #0056b3;
@@ -143,19 +165,21 @@ $conn->close();
         .error {
             color: red;
             margin-top: 10px;
-            text-align: center; /* Căn giữa thông báo lỗi */
+            text-align: center;
         }
         .toggle-link {
-            text-align: center; /* Căn giữa nội dung */
-            margin-top: 10px; /* Khoảng cách phía trên */
-            cursor: pointer; /* Thay đổi con trỏ khi hover */
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
         }
-        .toggle-link a, .toggle-link span {
-            color: #007bff; /* Màu liên kết */
-            text-decoration: none; /* Bỏ gạch chân mặc định */
+        .toggle-link a,
+        .toggle-link span {
+            color: #007bff;
+            text-decoration: none;
         }
-        .toggle-link a:hover, .toggle-link span:hover {
-            text-decoration: underline; /* Gạch chân khi hover */
+        .toggle-link a:hover,
+        .toggle-link span:hover {
+            text-decoration: underline;
         }
         .remember-me {
             display: flex;

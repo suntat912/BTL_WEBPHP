@@ -21,13 +21,13 @@ if (isset($_POST['update'])) {
     $_SESSION['cart'][$product_id]['quantity'] = $quantity;
 }
 
-// Không thêm sản phẩm mẫu vào giỏ hàng
-$total = 0;
 
 // Tính tổng tiền
+$total = 0;
 foreach ($_SESSION['cart'] as $item) {
     $total += $item['price'] * $item['quantity'];
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -142,6 +142,18 @@ foreach ($_SESSION['cart'] as $item) {
         .payment-button:hover {
             background: #0056b3; /* Màu xanh đậm khi hover */
         }
+
+        .discount-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .discount-container input {
+            width: 150px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ced4da; /* Viền sáng cho ô nhập mã */
+        }
     </style>
 </head>
 <body>
@@ -192,9 +204,10 @@ foreach ($_SESSION['cart'] as $item) {
     </table>
 
     <h3>Tổng Cộng: <?php echo number_format($total, 0, ',', '.'); ?> VNĐ</h3>
-
+    
     <!-- Nút thanh toán -->
     <form method="GET" action="checkout.php">
+        <input type="hidden" name="total" value="<?php echo $total_after_discount; ?>">
         <button type="submit" class="payment-button">Thanh Toán</button>
     </form>
 </div>

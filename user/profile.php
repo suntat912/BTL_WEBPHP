@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 // Kết nối đến cơ sở dữ liệu
 $servername = "localhost";
 $username = "root"; // Tên người dùng
-$password = "Nghiacoi2212@"; // Mật khẩu
+$password = "1234"; // Mật khẩu
 $dbname = "fashion_store"; // Tên cơ sở dữ liệu
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -44,6 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gender = $_POST['gender'];
     $date_of_birth = $_POST['date_of_birth'];
 
+    // Kiểm tra giá trị giới tính
+    if (!in_array($gender, ['male', 'female', 'other'])) {
+        echo "<script>alert('Giới tính không hợp lệ.');</script>";
+        return; // Dừng thực hiện nếu giới tính không hợp lệ
+    }
+
     $update_sql = "UPDATE User_Accounts SET full_name = ?, email = ?, phone = ?, gender = ?, date_of_birth = ? WHERE account_id = ?";
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param("sssssi", $full_name, $email, $phone, $gender, $date_of_birth, $user_id);
@@ -55,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
     } else {
-        echo "Cập nhật thông tin thất bại.";
+        echo "Cập nhật thông tin thất bại: " . $conn->error;
     }
 
     $update_stmt->close();
@@ -115,15 +121,14 @@ $conn->close();
             color: white;
             border: none;
             border-radius: 5px;
-            display: block; /* Đặt kiểu hiển thị là block */
-            margin: 10px auto; /* Căn giữa */
+            display: block;
+            margin: 10px auto;
             padding: 10px 15px;
             cursor: pointer;
             font-size: 16px;
             width: auto;
             margin-top: 10px;
         }
-
         button:hover {
             background: #218838;
         }
@@ -187,15 +192,16 @@ $conn->close();
                 <div class="form-group">
                     <label for="gender">Giới tính:</label>
                     <select name="gender" id="gender" required>
-                        <option value="Nam" <?php echo ($user['gender'] == 'Nam') ? 'selected' : ''; ?>>Nam</option>
-                        <option value="Nữ" <?php echo ($user['gender'] == 'Nữ') ? 'selected' : ''; ?>>Nữ</option>
+                        <option value="male" <?php echo ($user['gender'] == 'male') ? 'selected' : ''; ?>>Nam</option>
+                        <option value="female" <?php echo ($user['gender'] == 'female') ? 'selected' : ''; ?>>Nữ</option>
+                        <option value="other" <?php echo ($user['gender'] == 'other') ? 'selected' : ''; ?>>Khác</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="date_of_birth">Ngày sinh:</label>
                     <input type="date" name="date_of_birth" id="date_of_birth" value="<?php echo htmlspecialchars($user['date_of_birth']); ?>" required>
                 </div>
-                <button type="submit" >Lưu Thay Đổi</button>
+                <button type="submit">Lưu Thay Đổi</button>
             </form>
         </div>
     <?php else: ?>

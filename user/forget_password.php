@@ -1,8 +1,9 @@
 <?php
 session_start();
+// Kết nối đến cơ sở dữ liệu
 $servername = "localhost";
-$username = "root"; // Thay đổi với tên người dùng của bạn
-$password = "Nghiacoi2212@"; // Thay đổi với mật khẩu của bạn
+$username = "root"; // Tên người dùng
+$password = "1234"; // Mật khẩu
 $dbname = "fashion_store"; // Tên cơ sở dữ liệu
 
 $conn = new mysqli($servername, $username, $password, $dbname);

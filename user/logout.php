@@ -8,6 +8,6 @@ $_SESSION = [];
 session_destroy();
 
 // Chuyển hướng về trang đăng nhập
-header("Location: login_register.php");
+header("Location: index.php");
 exit();
 ?>

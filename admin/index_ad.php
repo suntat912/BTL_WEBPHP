@@ -2,14 +2,14 @@
 // Bắt đầu session và kiểm tra đăng nhập
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location: ../user/login_register.php"); // Chuyển hướng về trang đăng nhập nếu chưa đăng nhập
+    header("Location: /login_register.php"); // Chuyển hướng về trang đăng nhập nếu chưa đăng nhập
     exit();
 }
 
-// Kết nối đến cơ sở dữ liệu bằng PDO
+// Kết nối đến cơ sở dữ liệu
 $servername = "localhost";
-$username = "root"; // Tên người dùng cơ sở dữ liệu
-$password = "Nghiacoi2212@"; // Mật khẩu cơ sở dữ liệu
+$username = "root"; // Tên người dùng
+$password = "1234"; // Mật khẩu
 $dbname = "fashion_store"; // Tên cơ sở dữ liệu
 
 try {
@@ -113,7 +113,7 @@ try {
     </header>
     
     <div class="banner">
-        <img src="https://cdn.s99.vn/ss1/prod/product/7fbc91a7d40777a3be598dac25cbf166.jpg" alt="Banner">
+        <img src="https://www.shutterstock.com/shutterstock/photos/1730974153/display_1500/stock-vector-man-with-the-inscription-admin-icon-outline-man-with-the-inscription-admin-vector-icon-for-web-1730974153.jpg" alt="Banner">
     </div>
 
     <h2>Quản Lý Hệ Thống</h2>
@@ -125,7 +125,7 @@ try {
         <a href="manage_categories.php"><i class="fas fa-tags"></i> Quản Lý Danh Mục</a>
         <a href="manage_brands.php"><i class="fas fa-briefcase"></i> Quản Lý Thương Hiệu</a>
         <a href="statistics.php"><i class="fas fa-chart-bar"></i> Thống Kê</a> <!-- Thêm liên kết đến trang thống kê -->
-        <a href="../user/logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+        <a href="../user/logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a> <!-- Đường dẫn đến tệp logout.php -->
     </nav>
 
     <div class="card">
@@ -135,8 +135,7 @@ try {
         <a href="manage_contacts.php">Quản Lý Liên Hệ</a>
         <a href="manage_categories.php">Quản Lý Danh Mục</a>
         <a href="manage_brands.php">Quản Lý Thương Hiệu</a>
-        <a href="statistics.php"><i class="fas fa-chart-bar"></i> Thống Kê</a> <!-- Thêm liên kết đến trang thống kê -->
-        <a href="../user/logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+        <a href="statistics.php"><i class="fas fa-chart-bar"></i> Thống Kê</a>
     </div>
 
     <footer>
